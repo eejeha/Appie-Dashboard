@@ -1,4 +1,4 @@
-# Apie-Dashboard: Albert Heijn in Home Assistant
+# Appie-Dashboard: Albert Heijn in Home Assistant
 
 Een Home Assistant-integratie voor je Albert Heijn-account (de Appie-app):
 
@@ -23,7 +23,7 @@ Kassabonnen zijn alleen de bonnen uit de winkel waarbij je je Bonuskaart (app) h
 
 ## Installeren
 
-1. HACS → ⋮ → **Custom repositories** → `https://github.com/eejeha/Apie-Dashboard`, type **Integration**.
+1. HACS → ⋮ → **Custom repositories** → `https://github.com/eejeha/appie-Dashboard`, type **Integration**.
 2. Installeer **Albert Heijn** en herstart Home Assistant.
 3. Instellingen → Apparaten & diensten → **Integratie toevoegen** → *Albert Heijn*.
 
