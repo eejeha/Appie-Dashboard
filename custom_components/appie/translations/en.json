@@ -1,0 +1,30 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Albert Heijn",
+        "description": "1. Open [the AH login page]({login_url}) in Chrome, but **do not log in yet**.\n2. Open DevTools (Cmd+Option+I / F12), tab **Network**, tick **Preserve log** and type `login-exit` in the filter box.\n3. Log in (including the SMS code).\n4. Right-click the `login-exit` line → Copy → **Copy URL**, and paste it below. The code is only valid for a few minutes.",
+        "data": {
+          "login_link": "Login link (appie://login-exit?code=...)"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Log in to Albert Heijn again",
+        "description": "1. Open [the AH login page]({login_url}) in Chrome, but **do not log in yet**.\n2. Open DevTools (Cmd+Option+I / F12), tab **Network**, tick **Preserve log** and type `login-exit` in the filter box.\n3. Log in (including the SMS code).\n4. Right-click the `login-exit` line → Copy → **Copy URL**, and paste it below. The code is only valid for a few minutes.",
+        "data": {
+          "login_link": "Login link (appie://login-exit?code=...)"
+        }
+      }
+    },
+    "error": {
+      "invalid_link": "No code found in the pasted link.",
+      "code_expired": "AH refused the code; it probably expired. Log in again and paste a fresh link.",
+      "cannot_connect": "Could not reach Albert Heijn."
+    },
+    "abort": {
+      "already_configured": "This AH account is already set up.",
+      "reauth_successful": "Logged in again.",
+      "wrong_account": "That is a different AH account than before."
+    }
+  }
+}

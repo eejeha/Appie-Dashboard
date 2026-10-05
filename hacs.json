@@ -1,0 +1,6 @@
+{
+  "name": "Albert Heijn",
+  "render_readme": true,
+  "homeassistant": "2025.6.0",
+  "country": ["NL"]
+}
