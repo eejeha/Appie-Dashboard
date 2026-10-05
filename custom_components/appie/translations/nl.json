@@ -1,0 +1,141 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Albert Heijn",
+        "description": "1. Open [deze inlogpagina]({login_url}) in een desktopbrowser.\n2. Open vooraf de ontwikkelaarstools (F12) en kies het tabblad Netwerk.\n3. Log in met je AH-account. De browser probeert daarna `appie://login-exit?code=...` te openen; dat mislukt, dat is normaal.\n4. Zoek in het tabblad Netwerk het verzoek met `login-exit` (of de `Location`-header van de laatste redirect) en kopieer de volledige URL of alleen de waarde van `code`.\n5. Plak die hieronder. De code is kort geldig, plak hem zo snel mogelijk.",
+        "data": {
+          "code": "Autorisatiecode of redirect-URL"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Opnieuw inloggen bij Albert Heijn",
+        "description": "1. Open [deze inlogpagina]({login_url}) in een desktopbrowser.\n2. Open vooraf de ontwikkelaarstools (F12) en kies het tabblad Netwerk.\n3. Log in met je AH-account. De browser probeert daarna `appie://login-exit?code=...` te openen; dat mislukt, dat is normaal.\n4. Zoek in het tabblad Netwerk het verzoek met `login-exit` (of de `Location`-header van de laatste redirect) en kopieer de volledige URL of alleen de waarde van `code`.\n5. Plak die hieronder. De code is kort geldig, plak hem zo snel mogelijk.",
+        "data": {
+          "code": "Autorisatiecode of redirect-URL"
+        }
+      }
+    },
+    "error": {
+      "invalid_code": "Geen geldige code gevonden in de invoer.",
+      "auth_failed": "Inloggen mislukt. De code is mogelijk verlopen of al gebruikt, probeer opnieuw.",
+      "unknown": "Onverwachte fout."
+    },
+    "abort": {
+      "already_configured": "Dit account is al ingesteld.",
+      "reauth_successful": "Opnieuw ingelogd.",
+      "wrong_account": "Je bent ingelogd met een ander AH-account dan dit item."
+    }
+  },
+  "entity": {
+    "todo": {
+      "shopping_list": {
+        "name": "Boodschappenlijst"
+      }
+    },
+    "sensor": {
+      "shopping_list_open": {
+        "name": "Open items boodschappenlijst"
+      },
+      "last_receipt": {
+        "name": "Laatste kassabon"
+      },
+      "spent_this_month": {
+        "name": "Uitgaven deze maand"
+      },
+      "order_total": {
+        "name": "Bestelling totaal"
+      },
+      "next_delivery": {
+        "name": "Volgende bezorging"
+      },
+      "bonus_products": {
+        "name": "Bonusaanbiedingen"
+      }
+    }
+  },
+  "services": {
+    "add_to_order": {
+      "name": "Toevoegen aan bestelling",
+      "description": "Voegt een product toe aan de actieve online bestelling.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Account",
+          "description": "Alleen nodig bij meerdere accounts."
+        },
+        "product_id": {
+          "name": "Product-ID",
+          "description": "AH webshop product-ID (wi-nummer zonder 'wi')."
+        },
+        "quantity": {
+          "name": "Aantal",
+          "description": "Aantal om toe te voegen."
+        }
+      }
+    },
+    "remove_from_order": {
+      "name": "Verwijderen uit bestelling",
+      "description": "Verwijdert een product uit de actieve online bestelling.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Account",
+          "description": "Alleen nodig bij meerdere accounts."
+        },
+        "product_id": {
+          "name": "Product-ID",
+          "description": "AH webshop product-ID."
+        }
+      }
+    },
+    "shopping_list_to_order": {
+      "name": "Boodschappenlijst naar bestelling",
+      "description": "Zet alle niet-afgevinkte producten van de boodschappenlijst in de bestelling. Vrije-tekstitems worden overgeslagen.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Account",
+          "description": "Alleen nodig bij meerdere accounts."
+        }
+      }
+    },
+    "search_products": {
+      "name": "Producten zoeken",
+      "description": "Zoekt producten en geeft product-ID's terug.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Account",
+          "description": "Alleen nodig bij meerdere accounts."
+        },
+        "query": {
+          "name": "Zoekterm",
+          "description": "Waar je naar zoekt."
+        },
+        "limit": {
+          "name": "Maximum",
+          "description": "Maximaal aantal resultaten."
+        }
+      }
+    },
+    "add_product_to_list": {
+      "name": "Product op boodschappenlijst",
+      "description": "Zet een AH-product (geen vrije tekst) op de boodschappenlijst.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Account",
+          "description": "Alleen nodig bij meerdere accounts."
+        },
+        "product_id": {
+          "name": "Product-ID",
+          "description": "AH webshop product-ID."
+        },
+        "title": {
+          "name": "Titel",
+          "description": "Productnaam zoals die op de lijst moet staan."
+        },
+        "quantity": {
+          "name": "Aantal",
+          "description": "Aantal."
+        }
+      }
+    }
+  }
+}

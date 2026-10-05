@@ -1,0 +1,89 @@
+add_to_order:
+  fields:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: appie
+    product_id:
+      required: true
+      example: 482500
+      selector:
+        number:
+          min: 1
+          max: 99999999
+          mode: box
+    quantity:
+      default: 1
+      selector:
+        number:
+          min: 1
+          max: 99
+          mode: box
+
+remove_from_order:
+  fields:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: appie
+    product_id:
+      required: true
+      example: 482500
+      selector:
+        number:
+          min: 1
+          max: 99999999
+          mode: box
+
+shopping_list_to_order:
+  fields:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: appie
+
+search_products:
+  fields:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: appie
+    query:
+      required: true
+      example: halfvolle melk
+      selector:
+        text:
+    limit:
+      default: 10
+      selector:
+        number:
+          min: 1
+          max: 50
+          mode: box
+
+add_product_to_list:
+  fields:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: appie
+    product_id:
+      required: true
+      example: 482500
+      selector:
+        number:
+          min: 1
+          max: 99999999
+          mode: box
+    title:
+      required: true
+      example: AH Woksaus teriyaki
+      selector:
+        text:
+    quantity:
+      default: 1
+      selector:
+        number:
+          min: 1
+          max: 99
+          mode: box

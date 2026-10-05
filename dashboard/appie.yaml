@@ -1,0 +1,49 @@
+# Voorbeeld Lovelace-view. Plak in een dashboard via: Bewerken > Ruwe configuratie-editor.
+# Pas entity-ID's aan als die bij jou anders heten.
+title: Albert Heijn
+path: appie
+icon: mdi:cart
+cards:
+  - type: todo-list
+    entity: todo.albert_heijn_shopping_list
+    title: Boodschappenlijst
+
+  - type: entities
+    title: Bestelling
+    entities:
+      - entity: sensor.albert_heijn_order_total
+      - entity: sensor.albert_heijn_next_delivery
+        format: datetime
+      - type: button
+        name: Boodschappenlijst naar bestelling
+        icon: mdi:cart-arrow-down
+        action_name: Uitvoeren
+        tap_action:
+          action: perform-action
+          perform_action: appie.shopping_list_to_order
+          confirmation:
+            text: Alle niet-afgevinkte producten aan de bestelling toevoegen?
+
+  - type: markdown
+    title: Inhoud bestelling
+    content: >-
+      {% set items = state_attr('sensor.albert_heijn_order_total', 'items') or [] %}
+      {% for i in items %}- {{ i.quantity }}x {{ i.title }}
+      {% else %}Geen actieve bestelling.{% endfor %}
+
+  - type: entities
+    title: Uitgaven
+    entities:
+      - entity: sensor.albert_heijn_spent_this_month
+      - entity: sensor.albert_heijn_last_receipt
+
+  - type: markdown
+    title: Bonus deze week
+    content: >-
+      **{{ states('sensor.albert_heijn_bonus_offers') }} aanbiedingen**
+      ({{ state_attr('sensor.albert_heijn_bonus_offers', 'period_start') }} t/m
+      {{ state_attr('sensor.albert_heijn_bonus_offers', 'period_end') }})
+
+      {% for p in (state_attr('sensor.albert_heijn_bonus_offers', 'spotlight') or [])[:15] %}
+      - {{ p.title }}: {{ p.mechanism }}{% if p.price_now %} (€{{ '%.2f' | format(p.price_now) }}){% endif %}
+      {% endfor %}

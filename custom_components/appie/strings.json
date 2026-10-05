@@ -1,0 +1,141 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Albert Heijn",
+        "description": "1. Open [this login page]({login_url}) in a desktop browser.\n2. Before logging in, open the developer tools (F12) and select the Network tab.\n3. Log in with your AH account. The browser then tries to open `appie://login-exit?code=...`; that fails, which is expected.\n4. In the Network tab, find the request containing `login-exit` (or the `Location` header of the last redirect) and copy the full URL or just the `code` value.\n5. Paste it below. The code expires quickly.",
+        "data": {
+          "code": "Authorization code or redirect URL"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Re-authenticate Albert Heijn",
+        "description": "1. Open [this login page]({login_url}) in a desktop browser.\n2. Before logging in, open the developer tools (F12) and select the Network tab.\n3. Log in with your AH account. The browser then tries to open `appie://login-exit?code=...`; that fails, which is expected.\n4. In the Network tab, find the request containing `login-exit` (or the `Location` header of the last redirect) and copy the full URL or just the `code` value.\n5. Paste it below. The code expires quickly.",
+        "data": {
+          "code": "Authorization code or redirect URL"
+        }
+      }
+    },
+    "error": {
+      "invalid_code": "No valid code found in the input.",
+      "auth_failed": "Login failed. The code may have expired or already been used, try again.",
+      "unknown": "Unexpected error."
+    },
+    "abort": {
+      "already_configured": "This account is already configured.",
+      "reauth_successful": "Re-authentication was successful.",
+      "wrong_account": "You logged in with a different AH account than this entry."
+    }
+  },
+  "entity": {
+    "todo": {
+      "shopping_list": {
+        "name": "Shopping list"
+      }
+    },
+    "sensor": {
+      "shopping_list_open": {
+        "name": "Open shopping list items"
+      },
+      "last_receipt": {
+        "name": "Last receipt"
+      },
+      "spent_this_month": {
+        "name": "Spent this month"
+      },
+      "order_total": {
+        "name": "Order total"
+      },
+      "next_delivery": {
+        "name": "Next delivery"
+      },
+      "bonus_products": {
+        "name": "Bonus offers"
+      }
+    }
+  },
+  "services": {
+    "add_to_order": {
+      "name": "Add to order",
+      "description": "Adds a product to the active online order.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Account",
+          "description": "Only needed with multiple accounts."
+        },
+        "product_id": {
+          "name": "Product-ID",
+          "description": "AH webshop product ID (wi number without 'wi')."
+        },
+        "quantity": {
+          "name": "Quantity",
+          "description": "Quantity to add."
+        }
+      }
+    },
+    "remove_from_order": {
+      "name": "Remove from order",
+      "description": "Removes a product from the active online order.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Account",
+          "description": "Only needed with multiple accounts."
+        },
+        "product_id": {
+          "name": "Product-ID",
+          "description": "AH webshop product ID."
+        }
+      }
+    },
+    "shopping_list_to_order": {
+      "name": "Shopping list to order",
+      "description": "Adds all unchecked products from the shopping list to the order. Free-text items are skipped.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Account",
+          "description": "Only needed with multiple accounts."
+        }
+      }
+    },
+    "search_products": {
+      "name": "Search products",
+      "description": "Searches products and returns product IDs.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Account",
+          "description": "Only needed with multiple accounts."
+        },
+        "query": {
+          "name": "Query",
+          "description": "What to search for."
+        },
+        "limit": {
+          "name": "Maximum",
+          "description": "Maximum number of results."
+        }
+      }
+    },
+    "add_product_to_list": {
+      "name": "Add product to list",
+      "description": "Adds an AH product (not free text) to the shopping list.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Account",
+          "description": "Only needed with multiple accounts."
+        },
+        "product_id": {
+          "name": "Product-ID",
+          "description": "AH webshop product ID."
+        },
+        "title": {
+          "name": "Title",
+          "description": "Product name as shown on the list."
+        },
+        "quantity": {
+          "name": "Quantity",
+          "description": "Quantity."
+        }
+      }
+    }
+  }
+}
