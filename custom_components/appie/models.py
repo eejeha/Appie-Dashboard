@@ -302,7 +302,11 @@ def parse_receipt_detail(raw: dict) -> ReceiptDetail:
 def pos_name(name: str) -> str:
     """Till names are shouty abbreviations ("BIO BANAAN"); soften them."""
     name = " ".join(name.split())
-    return name[:1].upper() + name[1:].lower() if name.isupper() else name
+    if not name.isupper():
+        return name
+    soft = name[:1] + name[1:].lower()
+    # Keep the store brand recognisable: "AH ELSTAR" -> "AH elstar".
+    return "AH" + soft[2:] if name.startswith("AH ") else soft
 
 
 def month_total(receipts: list[Receipt], today: date, tz: tzinfo | None = None) -> float:

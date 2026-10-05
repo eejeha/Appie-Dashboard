@@ -160,5 +160,7 @@ def test_receipts():
     detail = models.parse_receipt_detail(DETAIL)
     assert detail.items[0] == {"name": "Bio banaan", "quantity": 1, "amount": 1.2}
     assert detail.items[1]["name"] == "AH Melk"
+    assert models.pos_name("AH ELSTAR") == "AH elstar"
+    assert models.pos_name("AHORNSIROOP") == "Ahornsiroop"
     assert detail.discount_total == -0.7
     assert detail.payments == ["PINNEN"]
