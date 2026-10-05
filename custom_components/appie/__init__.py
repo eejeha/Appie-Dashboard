@@ -14,11 +14,12 @@ from .coordinator import (
     AppieConfigEntry,
     AppieData,
     BonusCoordinator,
+    FavoritesCoordinator,
     ListCoordinator,
     ReceiptsCoordinator,
 )
 
-PLATFORMS = [Platform.SENSOR, Platform.TODO]
+PLATFORMS = [Platform.BUTTON, Platform.SENSOR, Platform.TODO]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: AppieConfigEntry) -> bool:
@@ -48,6 +49,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: AppieConfigEntry) -> boo
     shopping_list = ListCoordinator(hass, entry, client)
     bonus = BonusCoordinator(hass, entry, client, shopping_list)
     receipts = ReceiptsCoordinator(hass, entry, client)
+    favorites = FavoritesCoordinator(hass, entry, client)
 
     # Sequential on purpose: the first call may refresh the token.
     await shopping_list.async_config_entry_first_refresh()
@@ -55,8 +57,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: AppieConfigEntry) -> boo
     await receipts.async_config_entry_first_refresh()
 
     entry.async_on_unload(shopping_list.async_add_listener(bonus.list_changed))
-    entry.runtime_data = AppieData(client, shopping_list, bonus, receipts)
+    entry.runtime_data = AppieData(client, shopping_list, bonus, receipts, favorites)
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+    # The first count reads ~100 receipts (15 s); don't hold up startup for it.
+    entry.async_create_background_task(hass, favorites.async_refresh(), f"{entry.entry_id} favorites")
     return True
 
 

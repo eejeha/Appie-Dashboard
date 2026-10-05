@@ -164,3 +164,39 @@ def test_receipts():
     assert models.pos_name("AHORNSIROOP") == "Ahornsiroop"
     assert detail.discount_total == -0.7
     assert detail.payments == ["PINNEN"]
+
+
+def _lines(*rows):
+    return [list(r) for r in rows]
+
+
+def test_rank_purchases_counts_receipts_not_quantity():
+    receipts = [
+        _lines((1, "BIO BANAAN", 1, 1.2), (2, "KAISER WIT", 6, 1.7), (9, "STATIEGELD", 1, 0.15)),
+        _lines((1, "BIO BANAAN", 1, 1.2), (3, "AH MELK", 1, 1.1)),
+        _lines((1, "BIO BANAAN", 2, 2.4), (3, "AH MELK", 1, 1.1), (4, "BONUS", 1, -0.5)),
+    ]
+    ranked = models.rank_purchases(receipts)
+    assert [r[0] for r in ranked] == [1, 3, 2]  # 3 receipts, 2 receipts, 1 receipt (6 pieces)
+    assert ranked[0] == (1, "BIO BANAAN", 3)
+
+
+def test_build_favorites_falls_back_to_text_and_dedupes():
+    ranked = [(1, "BIO BANAAN", 14), (2, "AH PINDAKAAS", 14), (3, "AH PINDAKAAS GROOT", 3), (4, "AH THEE", 13)]
+    webshop = {1: -1, 2: 123432, 3: 123432, 4: 106661}
+    products = {
+        123432: {"webshopId": 123432, "title": "AH Smeuige pindakaas", "isBonus": True,
+                 "bonusMechanism": "15% KORTING", "images": IMG},
+        106661: {"webshopId": 106661, "title": "AH Kruiden kamille"},
+    }
+    favs = models.build_favorites(ranked, webshop, products, limit=10)
+    assert [f.title for f in favs] == ["Bio banaan", "AH Smeuige pindakaas", "AH Kruiden kamille"]
+    assert [f.rank for f in favs] == [1, 2, 3]
+    assert favs[0].product_id is None and favs[0].as_list_item().key == "text:bio banaan"
+    assert favs[1].as_list_item().patch()["productId"] == 123432
+    assert favs[1].is_bonus and favs[1].image == "https://img.invalid/200"
+    assert len(models.build_favorites(ranked, webshop, products, limit=2)) == 2
+
+
+def test_receipt_lines():
+    assert models.receipt_lines(DETAIL) == [[1, "BIO BANAAN", 1, 1.2], [2, "AH Melk", 2, 2.58]]

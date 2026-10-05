@@ -9,6 +9,7 @@ Een Home Assistant-integratie voor je Albert Heijn-account (de Appie-app):
 - **Boodschappenlijst**: de lijst uit de AH-app als to-do-lijst, twee kanten op gesynchroniseerd (elke minuut). Toevoegen, afvinken, hernoemen en verwijderen werkt vanuit HA én vanuit de app. Typ een productnummer (bijv. `441199`) om een echt AH-product toe te voegen in plaats van vrije tekst.
 - **Bonus voor ons**: alleen de bonus die ertoe doet: je persoonlijke bonus, bonus op producten die je eerder kocht, en bonus op wat op je lijst staat (die staat bovenaan).
 - **Kassabonnen**: je laatste kassabon met artikelen en korting, en wat je deze maand bij AH hebt uitgegeven.
+- **Vaak gekocht**: tien knoppen met wat je het vaakst koopt (geteld over je kassabonnen van de afgelopen 4 maanden). Eén tik zet het product op je lijst; staat het er al, dan komt er één bij.
 
 > Dit gebruikt de onofficiële, reverse-engineered API van de AH-app. Niet gelieerd aan Albert Heijn. AH kan de API of de inlogstap op elk moment veranderen.
 
@@ -20,6 +21,7 @@ Een Home Assistant-integratie voor je Albert Heijn-account (de Appie-app):
 | `sensor.albert_heijn_bonus_voor_ons` | Aantal relevante aanbiedingen. Attribuut `offers`: lijst met `title`, `mechanism` ("1 + 1 GRATIS"), `price`, `price_was`, `image`, `source` (`op_lijst` / `persoonlijk` / `eerder_gekocht`), `on_list`, `activated`, `end_date`. Ook `period_start`, `period_end`, `on_list`, `personal`. |
 | `sensor.albert_heijn_laatste_kassabon` | Totaal van de laatste kassabon (€). Attributen `datetime`, `items`, `discounts`, `discount_total`, `payments`, `recent` (laatste 10 bonnen). |
 | `sensor.albert_heijn_uitgaven_deze_maand` | Som van de kassabonnen deze maand (€, reset op de 1e; met langetermijnstatistiek). |
+| `button.albert_heijn_vaak_gekocht_1` … `_10` | Je tien vaakst gekochte producten, op volgorde. Naam en plaatje volgen het product; attributen `title`, `times_bought`, `product_id`, `bonus`, `on_list`, `quantity_on_list`. Indrukken = op de lijst zetten. Producten die AH niet online verkoopt (losse bananen) gaan er als vrije tekst op. |
 
 Grote attributen (`offers`, `items`, `recent`) worden niet in de database opgeslagen.
 

@@ -213,3 +213,24 @@ class AppieClient:
 
     async def get_receipt_detail(self, receipt_id: str) -> dict:
         return await self._graphql(RECEIPT_DETAIL_QUERY, {"id": receipt_id})
+
+    # products
+
+    async def convert_pos_ids(self, pos_ids: list[int]) -> dict[int, int]:
+        """Till product ids -> webshop ids (-1 when AH has no online product)."""
+        if not pos_ids:
+            return {}
+        aliases = " ".join(f"p{i}: productConvertId(sourceId: {int(pid)})" for i, pid in enumerate(pos_ids))
+        data = (await self._graphql(f"query Convert {{ {aliases} }}", {})).get("data") or {}
+        return {pid: data.get(f"p{i}") or -1 for i, pid in enumerate(pos_ids)}
+
+    async def get_products(self, webshop_ids: list[int]) -> dict[int, dict]:
+        """Product cards by webshop id; products not sold online are left out."""
+        ids = [int(i) for i in webshop_ids if i and i > 0]
+        if not ids:
+            return {}
+        query = "&".join(f"ids={i}" for i in ids)
+        rows = await self._request("GET", f"/mobile-services/product/search/v2/products?{query}&sortOn=INPUT_PRODUCT_IDS")
+        if isinstance(rows, dict):
+            rows = rows.get("products") or []
+        return {p["webshopId"]: p for p in rows or [] if p.get("webshopId")}

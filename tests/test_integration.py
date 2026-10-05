@@ -30,6 +30,10 @@ def api():
         patch("custom_components.appie.api.AppieClient.get_previously_bought_bonus", AsyncMock(return_value=PREVIOUS)),
         patch("custom_components.appie.api.AppieClient.get_receipts", AsyncMock(return_value=RECEIPTS)),
         patch("custom_components.appie.api.AppieClient.get_receipt_detail", AsyncMock(return_value=DETAIL)),
+        patch("custom_components.appie.api.AppieClient.convert_pos_ids", AsyncMock(return_value={1: -1, 2: 111})),
+        patch("custom_components.appie.api.AppieClient.get_products", AsyncMock(return_value={
+            111: {"webshopId": 111, "title": "AH Roomboter", "images": []}})),
+        patch("custom_components.appie.coordinator.FAVORITES_DAYS", 100_000),
     ):
         yield {"get_list": get_list, "patch_list": patch_list}
 
@@ -129,3 +133,29 @@ async def test_auth_failure_starts_reauth(hass: HomeAssistant, api) -> None:
     assert entry.state is ConfigEntryState.SETUP_ERROR
     flows = hass.config_entries.flow.async_progress()
     assert any(f["context"]["source"] == "reauth" for f in flows)
+
+
+async def test_favorite_buttons(hass: HomeAssistant, api) -> None:
+    await _setup(hass)
+    await hass.async_block_till_done()
+
+    first = hass.states.get("button.albert_heijn_vaak_gekocht_1")
+    second = hass.states.get("button.albert_heijn_vaak_gekocht_2")
+    assert hass.states.get("button.albert_heijn_vaak_gekocht_3").state == "unavailable"
+    # Both products are on all three receipts; the banana is not sold online -> text.
+    names = {first.attributes["title"], second.attributes["title"]}
+    assert names == {"Bio banaan", "AH Roomboter"}
+    butter = first if first.attributes["title"] == "AH Roomboter" else second
+    banana = second if butter is first else first
+    assert butter.attributes["on_list"] is True and butter.attributes["quantity_on_list"] == 1
+
+    # Already on the list: one more.
+    await hass.services.async_call("button", "press", {"entity_id": butter.entity_id}, blocking=True)
+    body = api["patch_list"].await_args.args[0][0]
+    assert body["productId"] == 111 and body["quantity"] == 2
+
+    # Not on the list: added as free text.
+    await hass.services.async_call("button", "press", {"entity_id": banana.entity_id}, blocking=True)
+    body = api["patch_list"].await_args.args[0][0]
+    assert body == {"description": "Bio banaan", "searchTerm": "Bio banaan", "type": "SHOPPABLE",
+                    "originCode": "TXT", "quantity": 1, "strikeThrough": False}

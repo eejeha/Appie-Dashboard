@@ -24,6 +24,11 @@ TOKEN_REFRESH_MARGIN = timedelta(days=1)
 LIST_INTERVAL = timedelta(seconds=60)
 BONUS_INTERVAL = timedelta(hours=6)
 RECEIPTS_INTERVAL = timedelta(hours=1)
+FAVORITES_INTERVAL = timedelta(hours=12)
 
 # How many receipts to fetch per update (covers well over a month).
 RECEIPTS_PAGE_SIZE = 50
+
+# "Vaak gekocht" buttons: how many, counted over how many days of receipts.
+FAVORITES_COUNT = 10
+FAVORITES_DAYS = 120

@@ -5,6 +5,7 @@ Kept free of Home Assistant imports so it can be tested on its own.
 
 from __future__ import annotations
 
+import re
 from dataclasses import asdict, dataclass, field, replace
 from datetime import date, datetime, tzinfo
 from typing import Any
@@ -313,3 +314,94 @@ def month_total(receipts: list[Receipt], today: date, tz: tzinfo | None = None) 
     return round(
         sum(r.total for r in receipts if (r.day(tz).year, r.day(tz).month) == (today.year, today.month)), 2
     )
+
+
+# --- most bought ---------------------------------------------------------------
+
+# Till lines that are not groceries.
+NOT_A_PRODUCT = re.compile(r"STATIEGELD|EMBALLAGE|\bTAS\b|TASJE|ZEGEL|SPAAR|AIRMILES", re.I)
+
+
+@dataclass
+class Favorite:
+    """A product we buy often, ready to put on the list."""
+
+    rank: int
+    title: str
+    times: int
+    product_id: int | None = None
+    image: str | None = None
+    is_bonus: bool = False
+    bonus_mechanism: str | None = None
+
+    def as_list_item(self) -> ListItem:
+        if self.product_id:
+            return new_product_item(self.product_id, self.title)
+        return new_text_item(self.title)
+
+
+def receipt_lines(raw: dict) -> list[list]:
+    """[[pos_id, name, quantity, amount], ...] from a posReceiptDetails response."""
+    det = (raw.get("data") or {}).get("posReceiptDetails") or {}
+    return [
+        [p.get("id"), p.get("name") or "", p.get("quantity") or 1, (p.get("amount") or {}).get("amount") or 0]
+        for p in det.get("products") or []
+        if p.get("id")
+    ]
+
+
+def rank_purchases(receipts: list[list[list]]) -> list[tuple[int, str, int]]:
+    """Rank till products by on how many receipts they appear (then quantity).
+
+    receipts: one receipt_lines() list per receipt. Returns (pos_id, name, times).
+    """
+    times: dict[int, int] = {}
+    qty: dict[int, float] = {}
+    names: dict[int, str] = {}
+    for lines in receipts:
+        seen = set()
+        for pos_id, name, quantity, amount in lines:
+            if amount <= 0 or NOT_A_PRODUCT.search(name):
+                continue
+            names[pos_id] = name
+            qty[pos_id] = qty.get(pos_id, 0) + quantity
+            if pos_id not in seen:
+                times[pos_id] = times.get(pos_id, 0) + 1
+                seen.add(pos_id)
+    order = sorted(times, key=lambda i: (-times[i], -qty[i], names[i]))
+    return [(i, names[i], times[i]) for i in order]
+
+
+def build_favorites(
+    ranked: list[tuple[int, str, int]],
+    webshop_ids: dict[int, int],
+    products: dict[int, dict],
+    limit: int = 10,
+) -> list[Favorite]:
+    """Top products: webshop product when AH sells it online, else the till name."""
+    favorites: list[Favorite] = []
+    seen: set = set()
+    for pos_id, name, times in ranked:
+        wid = webshop_ids.get(pos_id)
+        product = products.get(wid) if wid and wid > 0 else None
+        key = wid if product else pos_name(name).lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        if product:
+            favorites.append(
+                Favorite(
+                    rank=len(favorites) + 1,
+                    title=product.get("title") or pos_name(name),
+                    times=times,
+                    product_id=wid,
+                    image=pick_image(product.get("images")),
+                    is_bonus=bool(product.get("isBonus")),
+                    bonus_mechanism=product.get("bonusMechanism"),
+                )
+            )
+        else:
+            favorites.append(Favorite(rank=len(favorites) + 1, title=pos_name(name), times=times))
+        if len(favorites) == limit:
+            break
+    return favorites
