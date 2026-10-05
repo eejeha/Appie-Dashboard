@@ -4,7 +4,7 @@
 [![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://hacs.xyz/docs/faq/custom_repositories)
 [![License](https://img.shields.io/github/license/eejeha/Appie-Dashboard)](LICENSE)
 
-Een Home Assistant-integratie voor je Albert Heijn-account (de Appie-app):
+Een 100% ge-vibe-code Home Assistant-integratie voor je Albert Heijn-account (de Appie-app):
 
 - **Boodschappenlijst**: de lijst uit de AH-app als to-do-lijst, twee kanten op gesynchroniseerd (elke minuut). Toevoegen, afvinken, hernoemen en verwijderen werkt vanuit HA én vanuit de app. Typ een productnummer (bijv. `441199`) om een echt AH-product toe te voegen in plaats van vrije tekst.
 - **Bonus voor ons**: alleen de bonus die ertoe doet: je persoonlijke bonus, bonus op producten die je eerder kocht, en bonus op wat op je lijst staat (die staat bovenaan).
