@@ -11,6 +11,8 @@ Een 100% ge-vibe-code Home Assistant-integratie voor je Albert Heijn-account (de
 - **Kassabonnen**: je laatste kassabon met artikelen en korting, en wat je deze maand bij AH hebt uitgegeven.
 - **Vaak gekocht**: tien knoppen met wat je het vaakst koopt (geteld over je kassabonnen van de afgelopen 4 maanden). Eén tik zet het product op je lijst; staat het er al, dan komt er één bij.
 
+> **Met dank aan [Willem de Groot](https://github.com/gwillem) en [appie-go](https://github.com/gwillem/appie-go).** Zonder zijn uitzoekwerk aan de AH-app had deze integratie niet bestaan. Zie [Dankjewel](#dankjewel) onderaan.
+
 > Dit gebruikt de onofficiële, reverse-engineered API van de AH-app. Niet gelieerd aan Albert Heijn. AH kan de API of de inlogstap op elk moment veranderen.
 
 ## Entiteiten
@@ -62,6 +64,19 @@ python3 -m venv .venv
 .venv/bin/python -m pytest
 ```
 
-## Bronnen en licentie
+## Dankjewel
 
-De endpoints, headers en inlogstap volgen [gwillem/appie-go](https://github.com/gwillem/appie-go) en zijn gecontroleerd tegen een echt account. [KixAss/home-assistant-appie](https://github.com/KixAss/home-assistant-appie) liet zien hoe de v2-boodschappenlijst werkt. Dit is een eigen Python-implementatie, onder dezelfde licentie als appie-go: [AGPL-3.0](LICENSE).
+Deze integratie staat op de schouders van **[appie-go](https://github.com/gwillem/appie-go)** van **[Willem de Groot](https://github.com/gwillem)** ([@gwillem](https://github.com/gwillem)). Hij heeft de API van de Appie-app uitgeplozen en alles netjes gedocumenteerd in [`doc/albertheijn_api.md`](https://github.com/gwillem/appie-go/blob/main/doc/albertheijn_api.md). Vrijwel alles wat deze integratie doet, komt daar vandaan:
+
+| Onderdeel hier | Gebaseerd op appie-go |
+|---|---|
+| Inloggen via `appie://login-exit`, tokens verversen | `auth.go`, `login.go` |
+| Headers en client-id van de app | `client.go` |
+| Boodschappenlijst (v2) | `shoppinglist.go` + de API-documentatie |
+| Persoonlijke bonus en bonusweken | `bonus.go` ([bijdrage van @ddeboer](https://github.com/gwillem/appie-go/pull/28)) |
+| Kassabonnen (GraphQL) | `receipts.go` |
+| Kassacodes omzetten naar producten (*Vaak gekocht*) | `productConvertId` ([bijdrage van @aaearon](https://github.com/gwillem/appie-go/pull/17)) |
+
+Ook dank aan [@beninhos](https://github.com/gwillem/appie-go/issues/26) voor het uitzoeken van de inlogbeveiliging van AH, en aan [KixAss/home-assistant-appie](https://github.com/KixAss/home-assistant-appie), dat liet zien hoe de v2-boodschappenlijst zich gedraagt.
+
+Vind je dit handig? Geef [appie-go een ster](https://github.com/gwillem/appie-go). Deze repo is een eigen Python-implementatie en gebruikt dezelfde licentie als appie-go: [AGPL-3.0](LICENSE).
