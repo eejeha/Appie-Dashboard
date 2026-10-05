@@ -4,10 +4,10 @@
   "codeowners": ["@eejeha"],
   "config_flow": true,
   "dependencies": [],
-  "documentation": "https://github.com/eejeha/Apie-Dashboard",
+  "documentation": "https://github.com/eejeha/Appie-Dashboard",
   "integration_type": "service",
   "iot_class": "cloud_polling",
-  "issue_tracker": "https://github.com/eejeha/Apie-Dashboard/issues",
+  "issue_tracker": "https://github.com/eejeha/Appie-Dashboard/issues",
   "requirements": [],
   "version": "0.1.1"
 }

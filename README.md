@@ -1,5 +1,9 @@
 # Appie-Dashboard: Albert Heijn in Home Assistant
 
+[![Release](https://img.shields.io/github/v/release/eejeha/Appie-Dashboard)](https://github.com/eejeha/Appie-Dashboard/releases)
+[![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://hacs.xyz/docs/faq/custom_repositories)
+[![License](https://img.shields.io/github/license/eejeha/Appie-Dashboard)](LICENSE)
+
 Een Home Assistant-integratie voor je Albert Heijn-account (de Appie-app):
 
 - **Boodschappenlijst**: de lijst uit de AH-app als to-do-lijst, twee kanten op gesynchroniseerd (elke minuut). Toevoegen, afvinken, hernoemen en verwijderen werkt vanuit HA én vanuit de app. Typ een productnummer (bijv. `441199`) om een echt AH-product toe te voegen in plaats van vrije tekst.
@@ -23,7 +27,17 @@ Kassabonnen zijn alleen de bonnen uit de winkel waarbij je je Bonuskaart (app) h
 
 ## Installeren
 
-1. HACS → ⋮ → **Custom repositories** → `https://github.com/eejeha/appie-Dashboard`, type **Integration**.
+Met één klik in je eigen Home Assistant:
+
+[![Open je Home Assistant en open deze repository in HACS.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=eejeha&repository=Appie-Dashboard&category=integration)
+
+Installeer **Albert Heijn**, herstart Home Assistant en voeg daarna de integratie toe:
+
+[![Open je Home Assistant en voeg de integratie Albert Heijn toe.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=appie)
+
+Of met de hand:
+
+1. HACS → ⋮ → **Custom repositories** → `https://github.com/eejeha/Appie-Dashboard`, type **Integration**.
 2. Installeer **Albert Heijn** en herstart Home Assistant.
 3. Instellingen → Apparaten & diensten → **Integratie toevoegen** → *Albert Heijn*.
 
